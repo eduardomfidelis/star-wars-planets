@@ -1,8 +1,8 @@
+/*
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import Table from './Table';
 
-function App() {
+export default function PlanetData() {
   const [planets, setPlanets] = useState([]);
 
   useEffect(() => {
@@ -15,12 +15,11 @@ function App() {
   }, []);
 
   console.log(planets);
+
   return (
     <div>
       <Table planets={ planets } />
-
     </div>
   );
 }
-
-export default App;
+* */
