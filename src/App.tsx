@@ -4,6 +4,7 @@ import Table from './Table';
 
 function App() {
   const [planets, setPlanets] = useState([]);
+  const [nameFilter, setNameFilter] = useState('');
 
   useEffect(() => {
     async function fetchPlanets() {
@@ -14,10 +15,22 @@ function App() {
     fetchPlanets();
   }, []);
 
-  console.log(planets);
+  const planetsNameFilter = nameFilter.trim() === '' ? planets : planets
+    .filter((planet: any) => planet.name.toLowerCase()
+      .includes(nameFilter.toLowerCase()));
+
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setNameFilter(event.target.value);
+  };
   return (
     <div>
-      <Table planets={ planets } />
+      <input
+        type="text"
+        value={ nameFilter }
+        onChange={ handleChange }
+        data-testid="name-filter"
+      />
+      <Table planets={ planetsNameFilter } />
 
     </div>
   );
