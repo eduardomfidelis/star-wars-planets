@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     Filters();
-  });
+  }, [nameFilter, columnFilter, comparisonFilter, valueFilter]);
 
   const Filters = () => {
     let filteredData = planets;
@@ -32,21 +32,22 @@ function App() {
           .includes(nameFilter.toLowerCase()));
     }
 
-    filteredData = filteredData.filter((planet) => {
-      const planetValue = Number(planet[columnFilter]);
+    if (valueFilter !== '0') {
+      filteredData = filteredData.filter((planet) => {
+        const planetValue = Number(planet[columnFilter]);
 
-      switch (comparisonFilter) {
-        case 'maior que':
-          return planetValue > Number(valueFilter);
-        case 'menor que':
-          return planetValue < Number(valueFilter);
-        case 'igual a':
-          return planetValue === Number(valueFilter);
-        default:
-          return true;
-      }
-    });
-
+        switch (comparisonFilter) {
+          case 'maior que':
+            return planetValue > Number(valueFilter);
+          case 'menor que':
+            return planetValue < Number(valueFilter);
+          case 'igual a':
+            return planetValue === Number(valueFilter);
+          default:
+            return true;
+        }
+      });
+    }
     setFilteredPlanets(filteredData);
   };
 
