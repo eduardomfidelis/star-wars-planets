@@ -20,34 +20,28 @@ function App() {
   }, []);
 
   useEffect(() => {
-    Filters();
-  }, [nameFilter, columnFilter, comparisonFilter, valueFilter]);
-
+    const filteredData = planets.filter((planet: any) => planet.name.toLowerCase()
+      .includes(nameFilter.toLowerCase()));
+    setFilteredPlanets(filteredData);
+  }, [nameFilter, planets]);
   const Filters = () => {
     let filteredData = planets;
 
-    if (nameFilter.trim() !== '') {
-      filteredData = filteredData
-        .filter((planet: any) => planet.name.toLowerCase()
-          .includes(nameFilter.toLowerCase()));
-    }
+    filteredData = filteredData.filter((planet) => {
+      const planetValue = Number(planet[columnFilter]);
 
-    if (valueFilter !== '0') {
-      filteredData = filteredData.filter((planet) => {
-        const planetValue = Number(planet[columnFilter]);
+      switch (comparisonFilter) {
+        case 'maior que':
+          return planetValue > Number(valueFilter);
+        case 'menor que':
+          return planetValue < Number(valueFilter);
+        case 'igual a':
+          return planetValue === Number(valueFilter);
+        default:
+          return true;
+      }
+    });
 
-        switch (comparisonFilter) {
-          case 'maior que':
-            return planetValue > Number(valueFilter);
-          case 'menor que':
-            return planetValue < Number(valueFilter);
-          case 'igual a':
-            return planetValue === Number(valueFilter);
-          default:
-            return true;
-        }
-      });
-    }
     setFilteredPlanets(filteredData);
   };
 
