@@ -9,6 +9,9 @@ function App() {
   const [columnFilter, setColumnFilter] = useState('population');
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [valueFilter, setValueFilter] = useState('0');
+  const [numericFilters, setNumericFilters] = useState<{
+    [column: string]: { comparison: string; value: string };
+  }>({});
 
   useEffect(() => {
     async function fetchPlanets() {
@@ -20,26 +23,31 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const filteredData = planets.filter((planet: any) => planet.name.toLowerCase()
-      .includes(nameFilter.toLowerCase()));
-    setFilteredPlanets(filteredData);
-  }, [nameFilter, planets]);
+    Filters();
+  }, [nameFilter, planets, numericFilters]);
+
   const Filters = () => {
     let filteredData = planets;
 
-    filteredData = filteredData.filter((planet) => {
-      const planetValue = Number(planet[columnFilter]);
+    filteredData = filteredData.filter((planet: any) => {
+      return planet.name.toLowerCase().includes(nameFilter.toLowerCase());
+    });
 
-      switch (comparisonFilter) {
-        case 'maior que':
-          return planetValue > Number(valueFilter);
-        case 'menor que':
-          return planetValue < Number(valueFilter);
-        case 'igual a':
-          return planetValue === Number(valueFilter);
-        default:
-          return true;
-      }
+    Object.keys(numericFilters).forEach((column) => {
+      const { comparison, value } = numericFilters[column];
+      filteredData = filteredData.filter((planet) => {
+        const planetValue = Number(planet[column]);
+        switch (comparison) {
+          case 'maior que':
+            return planetValue > Number(value);
+          case 'menor que':
+            return planetValue < Number(value);
+          case 'igual a':
+            return planetValue === Number(value);
+          default:
+            return true;
+        }
+      });
     });
 
     setFilteredPlanets(filteredData);
@@ -62,7 +70,10 @@ function App() {
   };
 
   const handleFilterButtonClick = () => {
-    Filters();
+    setNumericFilters((prevFilters) => ({
+      ...prevFilters,
+      [columnFilter]: { comparison: comparisonFilter, value: valueFilter },
+    }));
   };
 
   return (
