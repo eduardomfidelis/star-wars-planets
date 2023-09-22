@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Table from './Table';
+import Filters from './Filters';
 
 function App() {
   const [planets, setPlanets] = useState([]);
@@ -23,10 +24,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    Filters();
+    aplyFilters();
   }, [nameFilter, planets, numericFilters]);
 
-  const Filters = () => {
+  const aplyFilters = () => {
     let filteredData = planets;
 
     filteredData = filteredData.filter((planet: any) => {
@@ -78,46 +79,17 @@ function App() {
 
   return (
     <div>
-      <input
-        type="text"
-        value={ nameFilter }
-        onChange={ handleNameFilterChange }
-        data-testid="name-filter"
-        placeholder="Filtrar por nome"
+      <Filters
+        nameFilter={ nameFilter }
+        columnFilter={ columnFilter }
+        comparisonFilter={ comparisonFilter }
+        valueFilter={ valueFilter }
+        onNameFilterChange={ handleNameFilterChange }
+        onColumnFilterChange={ handleColumnFilterChange }
+        onComparisonFilterChange={ handleComparisonFilterChange }
+        onValueFilterChange={ handleValueFilterChange }
+        onFilterButtonClick={ handleFilterButtonClick }
       />
-
-      <select
-        value={ columnFilter }
-        onChange={ handleColumnFilterChange }
-        data-testid="column-filter"
-      >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
-      </select>
-
-      <select
-        value={ comparisonFilter }
-        onChange={ handleComparisonFilterChange }
-        data-testid="comparison-filter"
-      >
-        <option value="maior que">maior que</option>
-        <option value="menor que">menor que</option>
-        <option value="igual a">igual a</option>
-      </select>
-
-      <input
-        type="text"
-        value={ valueFilter }
-        onChange={ handleValueFilterChange }
-        data-testid="value-filter"
-      />
-
-      <button data-testid="button-filter" onClick={ handleFilterButtonClick }>
-        Filtrar
-      </button>
 
       <Table planets={ filteredPlanets.length > 0 ? filteredPlanets : planets } />
     </div>
