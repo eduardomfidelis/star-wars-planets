@@ -24,10 +24,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    aplyFilters();
+    applyFilters();
   }, [nameFilter, planets, numericFilters]);
 
-  const aplyFilters = () => {
+  const applyFilters = () => {
     let filteredData = planets;
 
     filteredData = filteredData.filter((planet: any) => {
@@ -77,6 +77,16 @@ function App() {
     }));
   };
 
+  const handleRemoveFilterClick = (column: string) => {
+    const newNumericFilters = { ...numericFilters };
+    delete newNumericFilters[column];
+    setNumericFilters(newNumericFilters);
+  };
+
+  const handleRemoveAllFiltersClick = () => {
+    setNumericFilters({});
+  };
+
   return (
     <div>
       <Filters
@@ -89,7 +99,16 @@ function App() {
         onComparisonFilterChange={ handleComparisonFilterChange }
         onValueFilterChange={ handleValueFilterChange }
         onFilterButtonClick={ handleFilterButtonClick }
+        numericFilters={ numericFilters }
+        onRemoveFilterClick={ handleRemoveFilterClick }
       />
+
+      <button
+        data-testid="button-remove-filters"
+        onClick={ handleRemoveAllFiltersClick }
+      >
+        Remover todas filtragens
+      </button>
 
       <Table planets={ filteredPlanets.length > 0 ? filteredPlanets : planets } />
     </div>

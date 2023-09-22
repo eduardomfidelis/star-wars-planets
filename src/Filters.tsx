@@ -8,6 +8,8 @@ function Filters({
   onComparisonFilterChange,
   onValueFilterChange,
   onFilterButtonClick,
+  numericFilters,
+  onRemoveFilterClick,
 }: any) {
   return (
     <div>
@@ -51,6 +53,16 @@ function Filters({
       <button data-testid="button-filter" onClick={ onFilterButtonClick }>
         Filtrar
       </button>
+
+      {Object.keys(numericFilters).map((column) => (
+        <div key={ column } data-testid="filter">
+          {`${column} ${numericFilters[column]
+            .comparison} ${numericFilters[column].value}`}
+          {' '}
+          <button onClick={ () => onRemoveFilterClick(column) }>x</button>
+        </div>
+      ))}
+
     </div>
   );
 }
