@@ -10,6 +10,7 @@ function Filters({
   onFilterButtonClick,
   numericFilters,
   onRemoveFilterClick,
+  availableColumns,
 }: any) {
   return (
     <div>
@@ -26,11 +27,11 @@ function Filters({
         onChange={ onColumnFilterChange }
         data-testid="column-filter"
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {availableColumns.map((column: any) => (
+          <option key={ column } value={ column }>
+            {column}
+          </option>
+        ))}
       </select>
 
       <select

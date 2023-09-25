@@ -14,6 +14,14 @@ function App() {
     [column: string]: { comparison: string; value: string };
   }>({});
 
+  const [availableColumns, setAvailableColumns] = useState<string[]>([
+    'population',
+    'diameter',
+    'surface_water',
+    'orbital_period',
+    'rotation_period',
+  ]);
+
   useEffect(() => {
     async function fetchPlanets() {
       const response = await fetch('https://swapi.dev/api/planets');
@@ -75,16 +83,32 @@ function App() {
       ...prevFilters,
       [columnFilter]: { comparison: comparisonFilter, value: valueFilter },
     }));
+
+    setAvailableColumns((prevColumns) => prevColumns
+      .filter((column) => column !== columnFilter));
+
+    setColumnFilter('population');
+    setComparisonFilter('maior que');
+    setValueFilter('0');
   };
 
   const handleRemoveFilterClick = (column: string) => {
     const newNumericFilters = { ...numericFilters };
     delete newNumericFilters[column];
     setNumericFilters(newNumericFilters);
+
+    setAvailableColumns((prevColumns) => [...prevColumns, column]);
   };
 
   const handleRemoveAllFiltersClick = () => {
     setNumericFilters({});
+    setAvailableColumns([
+      'population',
+      'diameter',
+      'surface_water',
+      'orbital_period',
+      'rotation_period',
+    ]);
   };
 
   return (
@@ -101,6 +125,7 @@ function App() {
         onFilterButtonClick={ handleFilterButtonClick }
         numericFilters={ numericFilters }
         onRemoveFilterClick={ handleRemoveFilterClick }
+        availableColumns={ availableColumns }
       />
 
       <button
